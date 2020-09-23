@@ -38,6 +38,7 @@ class WebsiteAvailability:
 	        try:
 	            response = requests.get(f"https://{self.website_address}")
 	            status = response.status_code
+	            print(status)
 
 	            if status == 200:
 	                return "200: Available"
