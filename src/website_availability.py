@@ -8,14 +8,10 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 import json
 import urllib
-from bs4 import BeautifulSoup
-import csv
-from time import sleep
 import hashlib
 import urllib3
 import random
 from urllib.request import urlopen
-import nmap3
 import datetime
 import logging
 import ssl
@@ -29,10 +25,9 @@ class WebsiteAvailability:
 		ip_address = socket.gethostbyname(f"{self.website_address}")
 		return ip_address
 	    
-	def get_ping(self) -> str:
-		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
-		ip_address = self.get_ip_address()
-		return os.system(f"ping {ip_address}")
+	# def get_ping(self) -> str:
+	# 	ip_address = self.get_ip_address()
+	# 	return os.system(f"ping {ip_address}")
 	    
 	def get_http_status_code(self) -> str:
 	        try:
@@ -82,8 +77,8 @@ class WebsiteAvailability:
 	 	content_type = resp.headers['content-type']
 	 	return f"Server: {server}, Content type: {content_type}"
 	 	
-	def ssl_expiry_datetime(self) -> datetime.datetime:
-		logger = logging.getLogger('SSLVerify')
+	def ssl_expiry_datetime(self) -> datetime:
+		logger = logging.getLogger("SSLVerify")
 		ssl_date_fmt = r'%b %d %H:%M:%S %Y %Z'
 		
 		context = ssl.create_default_context()

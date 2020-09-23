@@ -63,11 +63,11 @@ while True:
 		print("*"*30)
 		sys.exit()
 	
-	elif individual_website_response == "1":
-		website = WebsiteAvailability(website_address)
-		ip_address = website.get_ping()
-		print(f"The IP address of this website is {ip_address}")
-		continue
+	# elif individual_website_response == "1":
+	# 	website = WebsiteAvailability(website_address)
+	# 	ip_address = website.get_ping()
+	# 	print(f"The IP address of this website is {ip_address}")
+	# 	continue
 	
 	elif individual_website_response == "2":
 		website = WebsiteAvailability(website_address)
@@ -85,28 +85,24 @@ while True:
 	    strategy = "strategy_unspecified"
 	    website = WebsiteAvailability(website_address)
 	    page_speed = website.get_pagespeed(strategy)
-	    print("Please be patient as this test may take a minute or so...")
 	    print(f"Your page speed is {page_speed}")
 	    continue
 	    
 	elif individual_website_response == "5":
 	    website = WebsiteAvailability(website_address)
 	    whois_status = website.check_whois_status()
-	    print("Please be patient as this test may take a minute or so...")
 	    print(f"{whois_status}")
 	    continue
 	    
 	elif individual_website_response == "6":
 	    website = WebsiteAvailability(website_address)
 	    server_and_content_type = website.get_server_and_content_type()
-	    print("Please be patient as this test may take a minute or so...")
-	    print(f"{whois_status}") 
+	    print(f"{server_and_content_type}") 
 	    continue
 	
 	elif individual_website_response == "7":
 		website = WebsiteAvailability(website_address)
 		ssl_expiry = website.ssl_expiry_datetime()
-		print("Please be patient as this test may take a minute or so...")
 		print(f"{ssl_expiry}") 
 		continue
 	

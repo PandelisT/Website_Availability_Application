@@ -6,7 +6,7 @@ import os
 
 class Notifications(WebsiteAvailability):
     
-    def __init__(self, sender: str, receiver: str, sender_number, receiver_number) -> str:
+    def __init__(self, sender: str, receiver: str, sender_number, receiver_number) -> None:
         self.sender = sender
         self.receiver = receiver
         self.sender_number = sender_number

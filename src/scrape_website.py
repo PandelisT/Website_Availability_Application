@@ -17,8 +17,6 @@ import random
 from urllib.request import urlopen
 import nmap3
 import datetime
-import logging
-import ssl
 from bs4 import BeautifulSoup
 
 from website_availability import WebsiteAvailability
@@ -26,7 +24,7 @@ from website_availability import WebsiteAvailability
 """Scrape metadata from target URL."""
 class ScrapeWebsite(WebsiteAvailability):
 
-	def __init__(self, website_address):
+	def __init__(self, website_address) -> None:
 		self.website_address = website_address
 		
 	@staticmethod
@@ -106,7 +104,6 @@ class ScrapeWebsite(WebsiteAvailability):
 	        }
 	    
 	    saved_metadata.append(new_metadata)
-	    
 	    return Data.save(file_path, saved_metadata) 
 	
 	def all_metadata(self):
