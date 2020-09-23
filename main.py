@@ -1,5 +1,6 @@
 import socket
 import os
+import sys
 import time
 import requests
 import whois
@@ -97,15 +98,23 @@ class WebsiteAvailability:
 		
 	
 	def health_check(self):
-		if self.website_address.get_http_status_code() == "200: Available" and self.website_address.get_pagespeed("strategy_unspecified") > 70:
+		if self.website_address.get_http_status_code() == "200: Available":
 			return "Your site is healthy!"
 		else:
 			return "There's something wrong with your site"
+			
+	def check_blacklisting(self):
+		ip_address = self.get_ip_address()
+		headers = { "x-auth-token": "3843809f-9481-4a92-bc6c-49b6a0222fe7" }
+		base_url= "https://signals.api.auth0.com/v2.0/ip/"
+		response_url = f"{base_url}{ip_address}"
+		response = requests.get(response_url, headers=headers)
+		r = json.loads(response.text)
+		print("As a rule of thumb, the more negative a value, the higher risk the IP. A zero value is neutral (good).")
+		return f"Your confidence score is r['fullip']['baddomain']['score']"
 
 class CheckHashAndPorts(WebsiteAvailability):
-	# def __init__(self, website_address: str) -> None:
-	# 	self.website_address = website_address
-		
+
 	"""Comparing MD5 Hash sum"""
 	def check_hash(self) -> str:
 		url = f"https://{self.website_address}"
@@ -276,43 +285,75 @@ class Notifications(WebsiteAvailability):
             return "Error"
             
 
+def instructions():
+    print("""
+Here are the steps to run this application:
+
+1. Run the **./main.py** file in the terminal to start the application.
+2. Use the log in details in the **username.py** file to successfully log in and access the application. If you input the incorrect combination three times you will be exited from the application.
+3. Press the ENTER key after any input in the terminal to access the option you chose.
+4. Make sure your input is as accurate as possible according to the prompts.
+5. If you accidentally exit the program, any actions you did during the previous run will remain.
+6. To run the program again simply follow Step 1. above. 
+""") 
+
+if "--help" in sys.argv:
+    instructions()
+    time.sleep(10)
+else:
+    pass
+
+    
 print("Welcome to the Website Availability Python Terminal Application (WAPTA)!")
 response = input(
 """Would you like to test an individual website or all your websites?
 1. Single website
 2. All websites\n
-Please choose 1 or 2\n""")
+Please choose 1 or 2\n"""
+)
+
+website_address = input("Which website would you like to check? ")
 
 while True: 
 	if response == "1":
-		website_address = input("Which website would you like to check? ")
 		
-		individual_website_response = input("""What would you like to check on this website?
-		1. Is your website up?
-		2. IP address
-		3. Current HTTP status code and availability
-		4. Page speed using Google PageInsights
-		5. Domain expiry and registrar
-		6. Server and content type
-		7. SSL expiry date
-		8. Is the domain registered? and Whois status
-		9. Compare MD5 hash sum
-		10. Port scanning with Nmap
-		11. Ping with Nmap
-		12. TCP scan with Nmap
-		13. Scrape website for metadata
-		14. Perform health check and send results to your email
-		15. Exit program
-		""")
+		individual_website_response = input("""\nWhat would you like to check on this website?
+1. Is your website up?
+2. IP address
+3. Current HTTP status code and availability
+4. Page speed using Google PageInsights
+5. Domain expiry and registrar
+6. Server and content type
+7. SSL expiry date
+8. Is the domain registered? and Whois status
+9. Compare MD5 hash sum
+10. Port scanning with Nmap
+11. Ping with Nmap
+12. TCP scan with Nmap
+13. Scrape website for metadata
+14. Perform health check and send results to your email
+15. Check bad ip score
+16. Exit program\n
+""")
+		
+		if individual_website_response == "16":
+			print("*"*30)
+			print("Exited the program successfully")
+			print("*"*30)
+			sys.exit()
 		
 	elif response == "2":
 		pass
 	
+	if individual_website_response == "1":
+		website = WebsiteAvailability(website_address)
+		ip_address = website.get_ping()
+		print(f"The IP address of this website is {ip_address}")	
 	
 	if individual_website_response == "2":
 		website = WebsiteAvailability(website_address)
 		ip_address = website.get_ip_address()
-		print(f"The IP address of this websie is {ip_address}")
+		print(f"The IP address of this website is {ip_address}")
 		
 	elif individual_website_response == "3":
 		website = WebsiteAvailability(website_address)
@@ -339,9 +380,10 @@ while True:
 	    print(f"{whois_status}") 
 		
 	elif individual_website_response == "7":
-	    ssl_expiry = website.ssl_expiry_datetime()
-	    print("Please be patient as this test may take a minute or so...")
-	    print(f"{ssl_expiry}") 
+		website = WebsiteAvailability(website_address)
+		ssl_expiry = website.ssl_expiry_datetime()
+		print("Please be patient as this test may take a minute or so...")
+		print(f"{ssl_expiry}") 
 		
 	elif individual_website_response == "8":
 		website = WebsiteAvailability(website_address)
@@ -379,16 +421,13 @@ while True:
 	    print(f"Favicon: {all_data[-1]['favicon']}")
 	    print(f"Saved metadata to metadata.json")
 	    
-		
 	elif individual_website_response == "14":
 		website = WebsiteAvailability(website_address)
 		website_health_check = website.health_check()
 		print(website_health_check["title"])
-
+		
 	elif individual_website_response == "15":
-		print("Exiting program")
-		break	
-
-
-
-	
+		website = WebsiteAvailability(website_address)
+		blacklist_score = website.check_blacklisting()
+		print(blacklist_score)
+		
