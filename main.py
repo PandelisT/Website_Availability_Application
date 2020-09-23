@@ -21,8 +21,6 @@ import logging
 import ssl
 from bs4 import BeautifulSoup
 
-
-
 class WebsiteAvailability:
 	def __init__(self, website_address: str) -> None:
 		self.website_address = website_address
@@ -32,7 +30,9 @@ class WebsiteAvailability:
 		return ip_address
 	    
 	def get_ping(self) -> str:
-	    return os.system(f"ping {self.website_address}")
+		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+		ip_address = self.get_ip_address()
+		return os.system(f"ping {ip_address}")
 	    
 	def get_http_status_code(self) -> str:
 	        try:
@@ -306,7 +306,7 @@ else:
     
 print("Welcome to the Website Availability Python Terminal Application (WAPTA)!")
 response = input(
-"""Would you like to test an individual website or all your websites?
+"""Would you like to test an individual website or multiple websites?
 1. Single website
 2. All websites\n
 Please choose 1 or 2\n"""
@@ -316,6 +316,16 @@ website_address = input("Which website would you like to check? ")
 
 while True: 
 	if response == "1":
+		try:
+			response = requests.get(f"https://{website_address}")
+			print("*"*40)
+			print("URL is valid and exists on the internet")
+			print("*"*40)
+		except requests.ConnectionError as exception:
+			print("*"*40)
+			print("URL does not exist on the internet")
+			print("*"*40)
+			break
 		
 		individual_website_response = input("""\nWhat would you like to check on this website?
 1. Is your website up?
