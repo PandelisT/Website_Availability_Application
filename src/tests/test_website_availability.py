@@ -1,8 +1,6 @@
 import unittest
 import os
-from website_availability import WebsiteAvailability
-from scrape_website import ScrapeWebsite
-
+from src.website_availability import WebsiteAvailability
 
 class TestWebsiteAvailabilityFunctions(unittest.TestCase):
     
