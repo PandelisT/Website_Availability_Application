@@ -40,8 +40,7 @@ while True:
 while True: 
 	get_new_website = View(website_address)	
 	options = get_new_website.show_options()
-	
 	individual_website_response = input(options)
-	
 	option = ChooseOptions(website_address, individual_website_response)
 	print(option.choose_options())
+	time.sleep(3)

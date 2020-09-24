@@ -7,6 +7,7 @@ class TestWebsiteAvailabilityFunctions(unittest.TestCase):
     def test_get_ip_address(self):
         website = WebsiteAvailability(os.environ.get("TEST_DOMAIN"))
         ip_address = website.get_ip_address()
+        self.assertIsInstance(ip_address, str)
         self.assertEqual(ip_address, os.environ.get("TEST_IP_ADDRESS"))
         
     def test_get_http_status_code(self):
@@ -18,6 +19,3 @@ class TestWebsiteAvailabilityFunctions(unittest.TestCase):
         website = WebsiteAvailability(os.environ.get("TEST_DOMAIN"))
         server_and_content_type = website.get_server_and_content_type()
         self.assertIsInstance(server_and_content_type, tuple)
-        
-        
-        
