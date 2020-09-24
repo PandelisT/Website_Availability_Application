@@ -1,4 +1,3 @@
-
 import requests
 import os, sys
 from website_availability import WebsiteAvailability
@@ -46,11 +45,10 @@ class View:
 15. Check bad ip score
 16. Exit program\n
 """
-
 	
 class ChooseOptions(CheckHashAndPorts, ScrapeWebsite, View):
     
-    def __init__(self, website_address, individual_website_response):
+    def __init__(self, website_address, individual_website_response) -> None:
         self.individual_website_response = individual_website_response
         self.website_address = website_address
 	
@@ -85,7 +83,7 @@ class ChooseOptions(CheckHashAndPorts, ScrapeWebsite, View):
 	        
 	    elif self.individual_website_response == "6":
 	        server_and_content_type = website.get_server_and_content_type()
-	        return Fore.GREEN + f"{server_and_content_type}"
+	        return Fore.GREEN + f"Server: {server_and_content_type[0]}, Content type: {server_and_content_type[1]}"
 	        
 	    elif self.individual_website_response == "7":
 	        ssl_expiry = website.ssl_expiry_datetime()
@@ -131,5 +129,5 @@ class ChooseOptions(CheckHashAndPorts, ScrapeWebsite, View):
 	    
 	    elif self.individual_website_response == "15":
 	        blacklist_score = website.check_blacklisting()
-	        return Fore.GREEN + f"{blacklist_score}"
+	        return Fore.GREEN + f"Your confidence score is {blacklist_score}"
 	

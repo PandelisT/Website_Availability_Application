@@ -45,4 +45,3 @@ while True:
 	
 	option = ChooseOptions(website_address, individual_website_response)
 	print(option.choose_options())
-				
