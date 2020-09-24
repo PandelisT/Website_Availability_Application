@@ -19,7 +19,7 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Run tests
         run: |
-          python -m unittest discover website_availability_app/src/tests/
+          python -m unittest discover src/tests/
 
   deployment:
     needs: test_suite
@@ -33,10 +33,10 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: 22
           script: |
-            rm -rf squiz
-            git clone https://github.com/PandelisT/squiz.git
-            python3.8 -m venv /home/github-actions/squiz/venv
-            source /home/github-actions/squiz/venv/bin/activate
-            pip install -r /home/github-actions/squiz/requirements.txt
+            rm -rf website_availability_app
+            git clone https://github.com/PandelisT/Website_Availability_Application.git
+            python3.8 -m venv /home/github-actions/website_availability_app/venv
+            source /home/github-actions/website_availability_app/venv/bin/activate
+            pip install -r /home/github-actions/website_availability_app/requirements.txt
             
           
