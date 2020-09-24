@@ -4,8 +4,6 @@ import sys
 import time
 import requests
 import whois
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
 import json
 import urllib
 import hashlib
@@ -25,24 +23,18 @@ class WebsiteAvailability:
 		ip_address = socket.gethostbyname(f"{self.website_address}")
 		return ip_address
 	    
-	# def get_ping(self) -> str:
-	# 	ip_address = self.get_ip_address()
-	# 	return os.system(f"ping {ip_address}")
-	    
 	def get_http_status_code(self) -> str:
 	        try:
 	            response = requests.get(f"https://{self.website_address}")
 	            status = response.status_code
-	            print(status)
 
 	            if status == 200:
-	                return "200: Available"
+	                return "200: Available" # tuple (status, "Available")
 	            else:
 	               return "Unavailable"
-	            time.sleep(1)
 	            
 	        except Exception:
-	            return "No Internet"
+	        	return "No Internet"
 	            
 	def check_whois_status(self) -> str:
 	    domain = whois.whois(f"{self.website_address}")
@@ -77,20 +69,20 @@ class WebsiteAvailability:
 	 	content_type = resp.headers['content-type']
 	 	return f"Server: {server}, Content type: {content_type}"
 	 	
-	def ssl_expiry_datetime(self) -> datetime:
+	def ssl_expiry_datetime(self) -> datetime.datetime:
 		logger = logging.getLogger("SSLVerify")
 		ssl_date_fmt = r'%b %d %H:%M:%S %Y %Z'
 		
 		context = ssl.create_default_context()
 		conn = context.wrap_socket(
 	        socket.socket(socket.AF_INET),
-	        server_hostname=self.website_address,
+	        server_hostname=self.website_address
 	    )
 	
-		logger.debug(f'Connect to {self.website_address}')
+		logger.debug(f"Connect to {self.website_address}")
 		conn.connect((self.website_address, 443))
 		ssl_info = conn.getpeercert()
-		return f"Expiration date of SSL certificate: {datetime.datetime.strptime(ssl_info['notAfter'], ssl_date_fmt)}"
+		return datetime.datetime.strptime(ssl_info['notAfter'], ssl_date_fmt)
 		
 	
 	def health_check(self):

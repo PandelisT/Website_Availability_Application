@@ -4,20 +4,15 @@ import sys
 import time
 import requests
 import whois
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
 import json
 import urllib
 from bs4 import BeautifulSoup
-import csv
-from time import sleep
 import hashlib
 import urllib3
 import random
 from urllib.request import urlopen
 import nmap3
 import datetime
-from bs4 import BeautifulSoup
 
 from website_availability import WebsiteAvailability
 
@@ -89,18 +84,12 @@ class ScrapeWebsite(WebsiteAvailability):
 	    file_path = "metadata.json"
 	    saved_metadata = self.all_metadata()
 	    
-	    title = self.get_title()
-	    description = self.get_description()
-	    image = self.get_image()
-	    favicon = self.get_favicon()
-	    sitename = self.get_site_name()
-	    
 	    new_metadata = {
-	        'title': title,
-	        'description': description,
-	        'image': image,
-	        'favicon': favicon,
-	        'sitename':  sitename,
+	        "title": self.get_title(),
+	        "description": self.get_description(),
+	        "image": self.get_image(),
+	        "favicon": self.get_favicon(),
+	        "sitename":  self.get_site_name(),
 	        }
 	    
 	    saved_metadata.append(new_metadata)

@@ -4,8 +4,6 @@ import sys
 import time
 import requests
 import whois
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
 import json
 import urllib
 from bs4 import BeautifulSoup
@@ -19,7 +17,6 @@ import nmap3
 import datetime
 import logging
 import ssl
-from bs4 import BeautifulSoup
 
 from website_availability import WebsiteAvailability
 
