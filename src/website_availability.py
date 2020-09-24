@@ -40,7 +40,7 @@ class WebsiteAvailability:
 	               return (status, "Unavailable")
 	            
 	        except Exception:
-	        	return (status, "No Internet")
+	        	print("No Internet")
 	            
 	def check_whois_status(self) -> tuple:
 	    domain = whois.whois(f"{self.website_address}")
