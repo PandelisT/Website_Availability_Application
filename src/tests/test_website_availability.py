@@ -1,4 +1,5 @@
 import unittest
+import os
 from website_availability import WebsiteAvailability
 from scrape_website import ScrapeWebsite
 
@@ -6,17 +7,12 @@ from scrape_website import ScrapeWebsite
 class TestWebsiteAvailabilityFunctions(unittest.TestCase):
     
     def test_get_ip_address(self):
-        website = WebsiteAvailability("nerdypandy.com.au") #Environemnt variables for domains
+        website = WebsiteAvailability(os.environ.get("TEST_DOMAIN"))
         ip_address = website.get_ip_address()
-        self.assertEqual(ip_address, "149.28.188.138") #Environemnt variables for domains
+        self.assertEqual(ip_address, os.environ.get("TEST_IP_ADDRESS"))
         
     def test_get_http_status_code(self):
-        website = WebsiteAvailability("nerdypandy.com.au")
+        website = WebsiteAvailability(os.environ.get("TEST_DOMAIN"))
         http_status_code = website.get_http_status_code()
-        self.assertEqual(http_status_code, "200: Available" or "Unavailable" or "No Internet")
+        self.assertIsInstance(http_status_code, tuple)
         
-class TestScrapeWebsiteFunctions(unittest.TestCase):
-    def test_get_site_name(self):
-        website = ScrapeWebsite("nerdypandy.com.au")
-        result = website.get_site_name()
-        self.assertEqual(result, "Nerdy Pandy") # test that it is a string

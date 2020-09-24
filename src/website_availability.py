@@ -23,22 +23,28 @@ class WebsiteAvailability:
 		ip_address = socket.gethostbyname(f"{self.website_address}")
 		return ip_address
 	    
-	def get_http_status_code(self) -> str:
+	def get_http_status_code(self) -> tuple:
 	        try:
 	            response = requests.get(f"https://{self.website_address}")
 	            status = response.status_code
 
 	            if status == 200:
-	                return "200: Available" # tuple (status, "Available")
+	                return (status, "Available")
+	            elif status >= 500:
+	            	return (status, "Server error")
+	            elif status >= 400:
+	            	return (status, "User error")
+	            elif status >= 300:
+	            	return (status, "Redirection")
 	            else:
-	               return "Unavailable"
+	               return (status, "Unavailable")
 	            
 	        except Exception:
 	        	return "No Internet"
 	            
-	def check_whois_status(self) -> str:
+	def check_whois_status(self) -> tuple:
 	    domain = whois.whois(f"{self.website_address}")
-	    return f"Expiration date: {domain.expiration_date}, Registrar: {domain.registrar}"
+	    return (domain.expiration_date, domain.registrar)
 	
 	def get_pagespeed(self, strategy: str) -> float:
 		API_Key = "AIzaSyBUh1J0UqOPodBk5K-xnKUeLdlt1KTRQxc"
