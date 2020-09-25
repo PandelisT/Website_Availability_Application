@@ -28,15 +28,15 @@ jobs:
       - name: Fresh clone & repo install
         uses: appleboy/ssh-action@master
         with: 
-          host: 52.1.10.76
+          host: 54.144.44.160
           username: github-actions
           key: ${{ secrets.SSH_KEY }}
           port: 22
           script: |
             rm -rf website_availability_app
+            sudo apt-get install nmap
             git clone https://github.com/PandelisT/Website_Availability_Application.git
             python3.8 -m venv /home/github-actions/website_availability_app/venv
-            sudo apt-get install nmap
             source /home/github-actions/website_availability_app/venv/bin/activate
             pip install -r /home/github-actions/website_availability_app/requirements.txt
             
