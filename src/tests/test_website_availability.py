@@ -10,16 +10,16 @@ class TestWebsiteAvailabilityFunctions(unittest.TestCase):
         
         self.assertIsInstance(ip_address, str)
         
-        self.assertEqual(ip_address, os.environ.get("TEST_IP_ADDRESS"))
+        self.assertEqual(ip_address, "149.28.188.138" ) # os.environ.get("TEST_IP_ADDRESS")
         
     def test_get_http_status_code(self):
-        website = WebsiteAvailability(os.environ.get("TEST_DOMAIN"))
+        website = WebsiteAvailability("sydneyhearingclinic.com.au")
         http_status_code = website.get_http_status_code()
         
         self.assertIsInstance(http_status_code, tuple)
         
     def test_check_whois_status(self):
-        website = WebsiteAvailability(os.environ.get("TEST_DOMAIN"))
+        website = WebsiteAvailability("sydneyhearingclinic.com.au")
         server_and_content_type = website.get_server_and_content_type()
         
         self.assertIsInstance(server_and_content_type, tuple)
