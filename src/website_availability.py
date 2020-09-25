@@ -3,7 +3,7 @@ import os
 import sys
 import time
 import requests
-import whois
+# import whois
 import json
 import urllib
 import hashlib
@@ -55,12 +55,12 @@ class WebsiteAvailability:
 		score = json_data["lighthouseResult"]["categories"]["performance"]["score"]
 		return score*100
 		
-	def is_registered(self) -> bool:
-	  try:
-	      w = whois.whois(self.website_address)
-	      return bool(w.domain_name)
-	  except Exception:
-	        return False
+	# def is_registered(self) -> bool:
+	#   try:
+	#       w = whois.whois(self.website_address)
+	#       return bool(w.domain_name)
+	#   except Exception:
+	#         return False
 
 	def get_server_and_content_type(self) -> tuple:
 	 	resp = requests.head(f"https://{self.website_address}")

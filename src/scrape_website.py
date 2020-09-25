@@ -3,7 +3,6 @@ import os
 import sys
 import time
 import requests
-import whois
 import json
 import urllib
 from bs4 import BeautifulSoup
