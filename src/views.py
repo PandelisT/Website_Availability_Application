@@ -7,6 +7,7 @@ from notifications import Notifications
 from colorama import Fore, init
 init(autoreset=True)
 
+
 class View:
 
 	def __init__(self, website_address):

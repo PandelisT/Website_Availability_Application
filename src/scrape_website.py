@@ -13,7 +13,7 @@ from urllib.request import urlopen
 import nmap3
 import datetime
 
-# from src.website_availability import WebsiteAvailability
+
 from website_availability import WebsiteAvailability
 
 """Scrape metadata from target URL."""

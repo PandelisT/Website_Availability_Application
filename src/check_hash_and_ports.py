@@ -32,43 +32,28 @@ class CheckHashAndPorts(WebsiteAvailability):
 		    try:
 		        response = urlopen(url).read()
 		        currentHash = hashlib.sha224(response).hexdigest()
-		        time.sleep(5)
 		        response = urlopen(url).read()
 		        newHash = hashlib.sha224(response).hexdigest()
-		        print(newHash)
+
+		        from data import Data
+		        file_path = "hash.json"
+		        saved_hashes = self.all_hashes()
+
+		        for test in saved_hashes:
+		        	if test['title'] == self.website_address:
+		        		if test['hash'] == newHash:
+		        			return "Same hash!"
+		        		else:
+		        			return "Wesbite has been hacked!"
+		        	elif test['title'] != self.website_address:
+		        		new_hash = {"title": self.website_address, "hash": newHash}
+				        saved_hashes.append(new_hash)
+				        Data.save(file_path, saved_hashes)
+				        return "Added to file"
 		        
-		  #      from data import Data
-		  #      file_path = "hash.json"
-		  #      saved_metadata = self.all_metadata()
-		        
-		  #      new_metadata = {
-		  #      	"title": self.website_address,
-				# 	"hash": newHash,
-				# "image": self.get_image(),
-				# "favicon": self.get_favicon(),
-				# "sitename":  self.get_site_name(),
-				# }
-				
-				# saved_metadata.append(new_metadata)
-				# return Data.save(file_path, saved_metadata) 
-				
-				
-		
-		        if newHash == currentHash:
-		        	print("Same hash!")
-		        	tries += 1
-		        	continue
-		        else:
-		            response = urlopen(url).read()
-		            currentHash = hashlib.sha224(response).hexdigest()
-		            print("Something isn't right!")
-		            time.sleep(5)
-		            tries += 1
-		
 		    except Exception:
-		    	print("error")
+		    	return "error"
 		    	
-		return "Completed"
 	
 	def all_hashes(self):
 	    from data import Data
