@@ -38,6 +38,5 @@ jobs:
             sudo apt-get install python3.8-venv
             python3.8 -m venv /home/github-actions/Website_Availability_Application/venv
             source /home/github-actions/Website_Availability_Application/venv/bin/activate
+            python -m pip3.8 install -U pip3.8 wheel setuptools
             /home/github-actions/Website_Availability_Application/venv/bin/pip3.8 install -r /home/github-actions/Website_Availability_Application/requirements.txt
-            
-          
