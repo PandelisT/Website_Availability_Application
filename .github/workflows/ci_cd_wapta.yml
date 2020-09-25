@@ -33,11 +33,11 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: 22
           script: |
-            rm -rf Website_Availability_Application
+            rm -rf Website_Availability_App
             git clone https://github.com/PandelisT/Website_Availability_Application.git
-            sudo apt-get install python3-venv
-            python3.8 -m venv /home/github-actions/website_availability_app/venv
+            apt-get install python3-venv
+            python3.8 -m venv /home/github-actions/Website_Availability_App/website_availability_app/venv
             source /home/github-actions/website_availability_app/venv/bin/activate
-            pip install -r /home/github-actions/website_availability_app/requirements.txt
+            pip install -r /home/github-actions/Website_Availability_App/website_availability_app/requirements.txt
             
           
