@@ -39,7 +39,7 @@ class WebsiteAvailability:
 	            else:
 	               return (status, "Unavailable")
 	            
-	        except Exception:
+	        except socket.gaierror:
 	        	return ("Error", "No Internet")
 	            
 	def check_whois_status(self) -> tuple:
