@@ -5,7 +5,7 @@ from src.website_availability import WebsiteAvailability
 class TestWebsiteAvailabilityFunctions(unittest.TestCase):
     
     def test_get_ip_address(self):
-        website = WebsiteAvailability(os.environ.get("TEST_DOMAIN"))
+        website = WebsiteAvailability("sydneyhearingclinic.com.au") # os.environ.get("TEST_DOMAIN")
         ip_address = website.get_ip_address()
         
         self.assertIsInstance(ip_address, str)
