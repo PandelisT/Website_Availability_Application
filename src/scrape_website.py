@@ -14,7 +14,8 @@ from urllib.request import urlopen
 import nmap3
 import datetime
 
-from src.website_availability import WebsiteAvailability
+# from src.website_availability import WebsiteAvailability
+from website_availability import WebsiteAvailability
 
 """Scrape metadata from target URL."""
 class ScrapeWebsite(WebsiteAvailability):
@@ -44,13 +45,13 @@ class ScrapeWebsite(WebsiteAvailability):
 		html = BeautifulSoup(r.content, 'html.parser')
 		return html
 
-	def get_title(self):
+	def get_title(self) -> str:
 	    """Scrape page title."""
 	    html = self.get_html()
 	    self.title = html.title.string
 	    return self.title
 	
-	def get_description(self):
+	def get_description(self) -> str:
 	    """Scrape page description."""
 	    html = self.get_html()
 	    description = None
@@ -68,7 +69,7 @@ class ScrapeWebsite(WebsiteAvailability):
 	        image = html.find("meta", property="image").get('content')
 	    return image
 	
-	def get_site_name(self):
+	def get_site_name(self) -> str:
 	    """Scrape site name."""
 	    html = self.get_html()
 	    return html.find("meta", property="og:site_name").get('content')
@@ -78,7 +79,7 @@ class ScrapeWebsite(WebsiteAvailability):
 		"""Scrape favicon."""
 		return html.find("link", attrs={"rel": "icon"}).get('href')
 	    
-	def return_page_metadata(self) -> dict:
+	def return_page_metadata(self) -> None:
 	    """Scrape target URL for metadata and save to json."""
 	    from data import Data
 	    file_path = "metadata.json"

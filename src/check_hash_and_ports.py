@@ -36,6 +36,22 @@ class CheckHashAndPorts(WebsiteAvailability):
 		        time.sleep(5)
 		        response = urlopen(url).read()
 		        newHash = hashlib.sha224(response).hexdigest()
+		        print(newHash)
+		        
+		  #      from data import Data
+		  #      file_path = "hash.json"
+		  #      saved_metadata = self.all_metadata()
+		        
+		  #      new_metadata = {
+		  #      	"title": self.website_address,
+				# 	"hash": newHash,
+				# "image": self.get_image(),
+				# "favicon": self.get_favicon(),
+				# "sitename":  self.get_site_name(),
+				# }
+				
+				# saved_metadata.append(new_metadata)
+				# return Data.save(file_path, saved_metadata) 
 		
 		        if newHash == currentHash:
 		        	print("Same hash!")
@@ -52,6 +68,12 @@ class CheckHashAndPorts(WebsiteAvailability):
 		    	print("error")
 		    	
 		return "Completed"
+	
+	def all_hashes(self):
+	    from data import Data
+	    file_path = "hash.json"
+	    return Data.load(file_path)
+	
 		
 	"""Nmap analysis of ports, pinging and tcp scan"""
 	def nmap_port_scanning(self) -> str:

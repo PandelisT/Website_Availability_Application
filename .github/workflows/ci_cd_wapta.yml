@@ -36,6 +36,7 @@ jobs:
             rm -rf website_availability_app
             git clone https://github.com/PandelisT/Website_Availability_Application.git
             python3.8 -m venv /home/github-actions/website_availability_app/venv
+            sudo apt-get install nmap
             source /home/github-actions/website_availability_app/venv/bin/activate
             pip install -r /home/github-actions/website_availability_app/requirements.txt
             

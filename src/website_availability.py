@@ -40,7 +40,7 @@ class WebsiteAvailability:
 	               return (status, "Unavailable")
 	            
 	        except Exception:
-	        	print("No Internet")
+	        	return ("Error", "No Internet")
 	            
 	def check_whois_status(self) -> tuple:
 	    domain = whois.whois(f"{self.website_address}")
@@ -52,10 +52,7 @@ class WebsiteAvailability:
 		response_url = f"{base_url}https://{self.website_address}&key={Google_API_Key}&strategy={strategy}"
 		response = requests.get(response_url)
 		json_data = response.json()
-		lighthouseResult = json_data["lighthouseResult"]
-		categories = lighthouseResult["categories"]
-		performance = categories["performance"]
-		score = performance["score"]
+		score = json_data["lighthouseResult"]["categories"]["performance"]["score"]
 		return score*100
 		
 	def is_registered(self) -> bool:
