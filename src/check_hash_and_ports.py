@@ -40,6 +40,7 @@ class CheckHashAndPorts(WebsiteAvailability):
 		        saved_hashes = self.all_hashes()
 
 		        for test in saved_hashes:
+		        	print(test)
 		        	if test['title'] == self.website_address:
 		        		if test['hash'] == newHash:
 		        			return "Same hash!"
@@ -60,18 +61,14 @@ class CheckHashAndPorts(WebsiteAvailability):
 	    file_path = "hash.json"
 	    return Data.load(file_path)
 	
-		
 	"""Nmap analysis of ports, pinging and tcp scan"""
 	def nmap_port_scanning(self) -> str:
 		nmap = nmap3.Nmap()
 		results = nmap.scan_top_ports(f"{self.website_address}")
 		ip_address = self.get_ip_address()
-		
-			
 		for port in results[ip_address]:
 			if port['state'] == "open":
 				print(f"Port {port['portid']}: {port['state']}")
-		
 		return "Completed"
 				
 	def nmap_ping_scanning(self) -> str:

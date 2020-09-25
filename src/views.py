@@ -74,10 +74,16 @@ class ChooseOptions(CheckHashAndPorts, ScrapeWebsite, View):
 	        return Fore.GREEN + f"The HTTP status code is {http_status_code[0]}: {http_status_code[1]}"
 	    
 	    elif self.individual_website_response == "4":
-	        strategy = "strategy_unspecified"
-	        page_speed = website.get_pagespeed(strategy)
-	        return Fore.GREEN + f"Your page speed is {page_speed}"
-	    
+	    	print("*"*50)
+	    	print("Page performance is the overall performance score of your page.")
+	    	print("First Meaningful Paint measures when the primary content of a page is visible.")
+	    	print("Speed Index shows how quickly the contents of a page are visibly populated.")
+	    	print("Time to interactive is the amount of time it takes for the page to become fully interactive.")
+	    	print("*"*50)
+	    	strategy = "strategy_unspecified"
+	    	page_performance = website.get_pagespeed(strategy)
+	    	return Fore.GREEN + f"Your page performance is {page_performance[0]}, First Meaningful Paint: {page_performance[1]}, Speed Index: {page_performance[2]},  Time To Interactive: {page_performance[3]}"
+	        
 	    elif self.individual_website_response == "5":
 	        whois_status = website.check_whois_status()
 	        return Fore.GREEN + f"Expiration date: {whois_status[0]}, Registrar: {whois_status[1]}"

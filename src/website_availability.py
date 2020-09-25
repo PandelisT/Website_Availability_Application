@@ -46,8 +46,11 @@ class WebsiteAvailability:
         response = requests.get(response_url)
         json_data = response.json()
         score = json_data["lighthouseResult"]["categories"]["performance"]["score"]
-        return score*100
-		
+        first_meaningful_paint = json_data["lighthouseResult"]["audits"]["first-meaningful-paint"]["displayValue"]
+        speed_index = json_data["lighthouseResult"]["audits"]["speed-index"]["displayValue"]
+        time_to_interactive = json_data["lighthouseResult"]["audits"]["interactive"]["displayValue"]
+        return (score*100, first_meaningful_paint, speed_index, time_to_interactive )
+        
     def is_registered(self) -> bool:
         try:
             w = whois.whois(self.website_address)
