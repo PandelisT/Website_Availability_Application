@@ -52,6 +52,8 @@ class CheckHashAndPorts(WebsiteAvailability):
 				
 				# saved_metadata.append(new_metadata)
 				# return Data.save(file_path, saved_metadata) 
+				
+				
 		
 		        if newHash == currentHash:
 		        	print("Same hash!")
