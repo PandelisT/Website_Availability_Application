@@ -1,6 +1,6 @@
 import unittest
 import os
-from src.website_availability import WebsiteAvailability
+from website_availability import WebsiteAvailability
 
 class TestWebsiteAvailabilityFunctions(unittest.TestCase):
     
@@ -18,8 +18,10 @@ class TestWebsiteAvailabilityFunctions(unittest.TestCase):
         
         self.assertIsInstance(http_status_code, tuple)
         
-    def test_check_whois_status(self):
+    def test_test_get_server_and_content_type(self):
         website = WebsiteAvailability("nerdypandy.com.au")
         server_and_content_type = website.get_server_and_content_type()
         
         self.assertIsInstance(server_and_content_type, tuple)
+        
+        

@@ -18,7 +18,7 @@ import datetime
 import logging
 import ssl
 
-from src.website_availability import WebsiteAvailability
+from website_availability import WebsiteAvailability
 
 class CheckHashAndPorts(WebsiteAvailability):
 

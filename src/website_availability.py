@@ -80,6 +80,7 @@ class WebsiteAvailability:
 		ssl_info = conn.getpeercert()
 		return datetime.datetime.strptime(ssl_info['notAfter'], ssl_date_fmt)
 		
+	"""In the works"""
 	def health_check(self):
 		if self.website_address.get_http_status_code() == (200, "Available"):
 			return "Your site is healthy!"
