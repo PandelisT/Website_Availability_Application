@@ -43,6 +43,8 @@ class ScrapeWebsite(WebsiteAvailability):
 	        description = html.find("meta", property="description").get("content")
 	    elif html.find("meta", property="og:description"):
 	        description = html.find("meta", property="og:description").get("content")
+	    else:
+	    	"No description available"
 	    return description
 	
 	def get_image(self) -> str:
@@ -50,6 +52,8 @@ class ScrapeWebsite(WebsiteAvailability):
 	    html = self.get_html()
 	    if html.find("meta", property="image"):
 	        image = html.find("meta", property="image").get('content')
+	    else:
+	    	return "No image available"
 	    return image
 	
 	def get_site_name(self) -> str:
@@ -58,7 +62,10 @@ class ScrapeWebsite(WebsiteAvailability):
 	
 	def get_favicon(self) -> str:
 		html = self.get_html()
-		return html.find("link", attrs={"rel": "icon"}).get('href')
+		try:
+			return html.find("link", attrs={"rel": "icon"}).get('href')
+		except:
+			"No favicon available"
 	    
 	def return_page_metadata(self) -> None:
 	    from data import Data

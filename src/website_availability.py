@@ -37,9 +37,11 @@ class WebsiteAvailability:
 	            
     def check_whois_status(self) -> tuple:
         domain = whois.whois(f"{self.website_address}")
+        print(type(domain.expiration_date))
+        print(type(domain.registrar))
         return (domain.expiration_date, domain.registrar)
 	
-    def get_pagespeed(self, strategy: str) -> float:
+    def get_pagespeed(self, strategy: str) -> tuple:
         Google_API_Key = os.environ.get("GOOGLE_API")
         base_url= "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url="
         response_url = f"{base_url}https://{self.website_address}&key={Google_API_Key}&strategy={strategy}"
