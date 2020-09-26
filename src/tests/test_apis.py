@@ -8,7 +8,7 @@ class TestAPIs(unittest.TestCase):
     
     def test_google_page_insights_api(self):
         error = False
-        website = WebsiteAvailability("nerdypandy.com.au")
+        website = WebsiteAvailability(os.environ.get("TEST_DOMAIN"))
         strategy="strategy_unspecified"
         
         try:
@@ -22,7 +22,7 @@ class TestAPIs(unittest.TestCase):
     
     def test_signals_ip_api(self):
         error = False
-        website = WebsiteAvailability("nerdypandy.com.au")
+        website = WebsiteAvailability(os.environ.get("TEST_DOMAIN"))
         try:
             blacklist_score = website.check_blacklisting()
         except:
