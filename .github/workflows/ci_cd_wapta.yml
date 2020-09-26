@@ -41,8 +41,8 @@ jobs:
           script: |
             rm -rf Website_Availability_Application
             git clone https://github.com/PandelisT/Website_Availability_Application.git
-            sudo apt-get install python3.8-venv
-            sudo apt-get install nmap
+            apt-get install python3.8-venv
+            apt-get install nmap
             python3.8 -m venv /home/github-actions/Website_Availability_Application/venv
             source /home/github-actions/Website_Availability_Application/venv/bin/activate
             python -m pip install --upgrade pip setuptools wheel
