@@ -19,8 +19,8 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         env:
-          TEST_DOMAIN = "nerdypandy.com.au"
-          TEST_IP_ADDRESS = "149.28.188.138"
+          TEST_DOMAIN = nerdypandy.com.au
+          TEST_IP_ADDRESS = 149.28.188.138
       - name: Run tests
         run: |
           cd src && python -m unittest discover tests/
