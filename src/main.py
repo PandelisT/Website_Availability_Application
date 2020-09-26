@@ -13,16 +13,16 @@ else:
     pass
 
 """Welcome Message"""
-print(72*"*")
+print(40*"*")
 print(Fore.GREEN + """
 Welcome to the Website Availability
 Python Terminal Application!
 """)
-print(72*"*")
+print(40*"*")
 
 """Loop to check user input"""
 while True:
-    website_address = input("Which website would you like to check? ")
+    website_address = input("Which website would you like to check? \n")
     get_new_website = View(website_address)
     new_website = get_new_website.get_website()
     print("*"*40)

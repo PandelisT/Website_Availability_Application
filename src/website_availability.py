@@ -32,8 +32,8 @@ class WebsiteAvailability:
 	        else:
 	           return (status, "Unavailable")
 	            
-        except socket.gaierror:
-        	return ("Error", "No Internet")
+        except Exception:
+        	return (0, "No Internet")
 	            
     def check_whois_status(self) -> tuple:
         domain = whois.whois(f"{self.website_address}")
@@ -74,12 +74,12 @@ class WebsiteAvailability:
         ssl_info = conn.getpeercert()
         return datetime.datetime.strptime(ssl_info['notAfter'], ssl_date_fmt)
 		
-    """In the works"""
     def health_check(self):
-        if self.website_address.get_http_status_code() == (200, "Available"):
-            return "Your site is healthy!"
-        else:
-            return "There's something wrong with your site"
+        strategy = "strategy_unspecified"
+        page_performance = self.get_pagespeed(strategy)
+        http_status = self.get_http_status_code()
+        blacklisting_score = self.check_blacklisting()
+        return (page_performance[0], http_status[0],  blacklisting_score)
 			
     def check_blacklisting(self) -> str:
         headers = {"x-auth-token": os.environ.get("SIGNALS_API")}
@@ -87,5 +87,4 @@ class WebsiteAvailability:
         response_url = f"{base_url}{self.get_ip_address()}"
         response = requests.get(response_url, headers=headers)
         r = json.loads(response.text)
-        print("As a rule of thumb, the more negative a value, the higher risk the IP. A zero value is neutral (good).")
         return r['fullip']['baddomain']['score']

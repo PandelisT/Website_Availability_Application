@@ -3,7 +3,6 @@ import os, sys
 from website_availability import WebsiteAvailability
 from check_hash_and_ports import CheckHashAndPorts
 from scrape_website import ScrapeWebsite
-from notifications import Notifications
 from colorama import Fore, init
 init(autoreset=True)
 
@@ -21,9 +20,9 @@ class View:
 			self.website_address = self.website_address[7:]
 		
 		try:
-			response = requests.get(f"https://{self.website_address}")
+			requests.get(f"https://{self.website_address}")
 			return (isValid, Fore.GREEN + "URL is valid and exists on the internet")
-		except requests.ConnectionError as exception:
+		except requests.ConnectionError:
 			isValid = False
 			return (isValid, Fore.RED + "URL does not exist on the internet")
 	
@@ -32,19 +31,18 @@ class View:
 1. Is your website up?
 2. What is the website's IP address?
 3. Current HTTP status code and availability
-4. Page speed/performance score using Google PageInsights
+4. Page performance using Google Page Speed Insights
 5. Domain expiry and registrar
 6. Server and content type
 7. SSL expiry date
-8. Is the domain registered + Whois status
+8. Is the domain registered?
 9. Compare MD5 hash sum
 10. Port scanning with Nmap
 11. Ping with Nmap
-12. TCP scan with Nmap
-13. Scrape website for metadata
-14. Perform health check and send results to your email
-15. Check bad ip score
-16. Exit program\n
+12. Scrape website for metadata
+13. Perform health check
+14. Check bad ip score
+15. Exit program\n
 """
 	
 class ChooseOptions(CheckHashAndPorts, ScrapeWebsite, View):
@@ -59,7 +57,7 @@ class ChooseOptions(CheckHashAndPorts, ScrapeWebsite, View):
 	    
 	    website_hash_test = CheckHashAndPorts(self.website_address)
 	    
-	    if self.individual_website_response == "16":
+	    if self.individual_website_response == "15":
 	        print("*"*32)
 	        print(Fore.GREEN + "Exited the program successfully")
 	        print("*"*32)
@@ -114,27 +112,24 @@ class ChooseOptions(CheckHashAndPorts, ScrapeWebsite, View):
 	    elif self.individual_website_response == "11" or self.individual_website_response == "1":
 	        nmap_ping = website_hash_test.nmap_ping_scanning()
 	        return Fore.GREEN + f"The website is {nmap_ping}"
-	        
+
 	    elif self.individual_website_response == "12":
-	        tcp_scan = website_hash_test.nmap_tcp_scanning()
-	        return Fore.GREEN + f"{tcp_scan}"
-	    
-	    elif self.individual_website_response == "13":
 	        website_scrape = ScrapeWebsite(self.website_address)
 	        json_metadata = website_scrape.return_page_metadata()
 	        all_data = website_scrape.all_metadata()
-	        print(f"Title: {all_data[-1]['title']}")
-	        print(f"Sitename: {all_data[-1]['sitename']}")
-	        print(f"Description: {all_data[-1]['description']}")
-	        print(f"Image: {all_data[-1]['image']}")
-	        print(f"Favicon: {all_data[-1]['favicon']}")
-	        print(f"Saved metadata to metadata.json")
+	        print(Fore.GREEN + f"Title: {all_data[-1]['title']}")
+	        print(Fore.GREEN + f"Sitename: {all_data[-1]['sitename']}")
+	        print(Fore.GREEN + f"Description: {all_data[-1]['description']}")
+	        print(Fore.GREEN + f"Image: {all_data[-1]['image']}")
+	        print(Fore.GREEN + f"Favicon: {all_data[-1]['favicon']}")
+	        return Fore.GREEN + f"Saved metadata to metadata.json"
+
+	    elif self.individual_website_response == "13":
+	    	print("Performing health check. Please be patient.")
+	    	website_health_check = website.health_check()
+	    	return Fore.GREEN + f"Your page performance is: {website_health_check[0]}, HTTP Status: {website_health_check[1]}, Blacklisting score is: {website_health_check[2]}"
 
 	    elif self.individual_website_response == "14":
-	        website_health_check = website.health_check()
-	        return Fore.GREEN + website_health_check["title"]
-	    
-	    elif self.individual_website_response == "15":
 	        blacklist_score = website.check_blacklisting()
 	        return Fore.GREEN + f"Your confidence score is {blacklist_score}"
 	

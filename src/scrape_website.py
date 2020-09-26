@@ -1,6 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import random
 from website_availability import WebsiteAvailability
 
 
@@ -41,9 +40,9 @@ class ScrapeWebsite(WebsiteAvailability):
 	    html = self.get_html()
 	    description = None
 	    if html.find("meta", property="description"):
-	        description = html.find("meta", property="description").get('content')
+	        description = html.find("meta", property="description").get("content")
 	    elif html.find("meta", property="og:description"):
-	        description = html.find("meta", property="og:description").get('content')
+	        description = html.find("meta", property="og:description").get("content")
 	    return description
 	
 	def get_image(self) -> str:
