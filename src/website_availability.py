@@ -58,7 +58,7 @@ class WebsiteAvailability:
             time_to_interactive = json_data["lighthouseResult"]["audits"]["interactive"]["displayValue"]
             return (score*100, first_meaningful_paint, speed_index, time_to_interactive)
         except Exception:
-            return "Unable to get information at this time"
+            return (0, "0", "0", "0")
 
     def is_registered(self) -> bool:
         try:
@@ -70,11 +70,11 @@ class WebsiteAvailability:
     def get_server_and_content_type(self) -> tuple:
         try:
             resp = requests.head(f"https://{self.website_address}")
-            server = resp.headers['server']
-            content_type = resp.headers['content-type']
+            server = resp.headers["server"]
+            content_type = resp.headers["content-type"]
             return (server, content_type)
         except Exception:
-            return "Unable to get server type and content type"
+            return ("Unavailable", "Unavailable")
 
     def ssl_expiry_datetime(self) -> datetime.datetime:
         try:
@@ -87,7 +87,7 @@ class WebsiteAvailability:
             ssl_info = conn.getpeercert()
             return datetime.datetime.strptime(ssl_info['notAfter'], ssl_date_fmt)
         except Exception:
-            return "Unable to get SSL expiration date"
+            return datetime.datetime.now()
 
     def health_check(self):
         try:
@@ -97,7 +97,7 @@ class WebsiteAvailability:
             blacklisting_score = self.check_blacklisting()
             return (page_performance[0], http_status[0], blacklisting_score)
         except Exception:
-            return "Unable to perform health check"
+            return (0, 0, 0)
 
     def check_blacklisting(self) -> str:
         try:
@@ -108,4 +108,4 @@ class WebsiteAvailability:
             r = json.loads(response.text)
             return r['fullip']['baddomain']['score']
         except Exception:
-            return "Unable to check blacklisting at this time"
+            return 0

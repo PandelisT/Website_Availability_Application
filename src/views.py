@@ -1,6 +1,7 @@
 import requests
 import os
 import sys
+import json
 from website_availability import WebsiteAvailability
 from check_hash_and_ports import CheckHashAndPorts
 from scrape_website import ScrapeWebsite
@@ -82,7 +83,7 @@ class ChooseOptions(CheckHashAndPorts, ScrapeWebsite, View, Notifications):
             print("Speed Index shows how quickly the page is populated.")
             print("Time to interactive is time it takes to become fully interactive.")
             print("*"*50)
-            
+    
             strategy = "strategy_unspecified"
             page_performance = website.get_pagespeed(strategy)
             return Fore.GREEN + f"Your page performance is {page_performance[0]}, First Meaningful Paint: {page_performance[1]}, Speed Index: {page_performance[2]},  Time To Interactive: {page_performance[3]}"
@@ -132,9 +133,16 @@ class ChooseOptions(CheckHashAndPorts, ScrapeWebsite, View, Notifications):
         elif self.individual_website_response == "13":
             print("Performing health check. Please be patient.")
             website_health_check = website.health_check()
-            receiver = input("What email would you like to send the health check? ")
-            send_email = Notifications(os.environ.get("SENDER_EMAIL"), receiver)
-            send_email.send_email_status()
+            url = "https://api.sendgrid.com/v3/mail/send"
+            headers = {"Authorization": f"{os.environ.get('SENDGRID_API')}",
+                       "Content-Type": "application/json"}
+            payload = {"personalizations": 
+                       [{"to": [{"email": f"{os.environ.get('TEST_EMAIL')}"}]}],
+                       "from": {"email": f"{os.environ.get('TEST_EMAIL')}"},
+                       "subject": "Health Check Status Report",
+                       "content": [{"type": "text/plain", "value": f"Your page performance is: {website_health_check[0]}, HTTP Status: {website_health_check[1]}, Blacklisting score is: {website_health_check[2]}"}]}
+            message = requests.post(url, data=json.dumps(payload), headers=headers)
+            print(message.text)
             return Fore.GREEN + f"Your page performance is: {website_health_check[0]}, HTTP Status: {website_health_check[1]}, Blacklisting score is: {website_health_check[2]}"
 
         elif self.individual_website_response == "14":
