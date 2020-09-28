@@ -20,70 +20,94 @@ class ScrapeWebsite(WebsiteAvailability):
         return headers
 
     def get_response(self) -> str:
-        header = ScrapeWebsite.list_headers()
-        url = f"https://{self.website_address}"
-        response = requests.get(url, headers=header)
-        return response
+        try:
+            header = ScrapeWebsite.list_headers()
+            url = f"https://{self.website_address}"
+            response = requests.get(url, headers=header)
+            return response
+        except Exception:
+            return "No response"
 
     def get_html(self) -> str:
-        r = self.get_response()
-        html = BeautifulSoup(r.content, "html.parser")
-        return html
+        try:
+            r = self.get_response()
+            html = BeautifulSoup(r.content, "html.parser")
+            return html
+        except Exception:
+            return "Unable to parse html"
 
     def get_title(self) -> str:
-        html = self.get_html()
-        self.title = html.title.string
-        return self.title
+        try:
+            html = self.get_html()
+            self.title = html.title.string
+            return self.title
+        except Exception:
+            return "Unable to return title"
 
     def get_description(self) -> str:
-        html = self.get_html()
-        description = None
-        if html.find("meta", property="description"):
-            description = html.find("meta", property="description").get("content")
-        elif html.find("meta", property="og:description"):
-            description = html.find("meta", property="og:description").get("content")
-        else:
-            "No description available"
-        return description
+        try:
+            html = self.get_html()
+            description = None
+            if html.find("meta", property="description"):
+                description = html.find("meta", property="description").get("content")
+            elif html.find("meta", property="og:description"):
+                description = html.find("meta", property="og:description").get("content")
+            else:
+                "No description available"
+            return description
+        except Exception:
+            return "Unable to get site description"
 
     def get_image(self) -> str:
-        image = None
-        html = self.get_html()
-        if html.find("meta", property="image"):
-            image = html.find("meta", property="image").get('content')
-        else:
-            return "No image available"
-        return image
+        try:
+            image = None
+            html = self.get_html()
+            if html.find("meta", property="image"):
+                image = html.find("meta", property="image").get('content')
+            else:
+                return "No image available"
+            return image
+        except Exception:
+            return "Unable to get image"
 
     def get_site_name(self) -> str:
-        html = self.get_html()
-        return html.find("meta", property="og:site_name").get('content')
+        try:
+            html = self.get_html()
+            return html.find("meta", property="og:site_name").get('content')
+        except:
+            return "Unable to get site name"
 
     def get_favicon(self) -> str:
-        html = self.get_html()
         try:
+            html = self.get_html()
             return html.find("link", attrs={"rel": "icon"}).get('href')
         except Exception:
             "No favicon available"
 
     def return_page_metadata(self) -> None:
-        from data import Data
-        file_path = "metadata.json"
-        saved_metadata = self.all_metadata()
-
-        new_metadata = {
-            "title": self.get_title(),
-            "description": self.get_description(),
-            "image": self.get_image(),
-            "favicon": self.get_favicon(),
-            "sitename":  self.get_site_name(),
-            }
-
-        saved_metadata.append(new_metadata)
-        Data.save(file_path, saved_metadata)
-        return "Added to file"
+        try:
+            from data import Data
+            file_path = "metadata.json"
+            saved_metadata = self.all_metadata()
+    
+            new_metadata = {
+                "title": self.get_title(),
+                "description": self.get_description(),
+                "image": self.get_image(),
+                "favicon": self.get_favicon(),
+                "sitename":  self.get_site_name(),
+                }
+    
+            saved_metadata.append(new_metadata)
+            Data.save(file_path, saved_metadata)
+            return "Added to file"
+        except Exception:
+            return "Unable to return metadata"
 
     def all_metadata(self):
-        from data import Data
-        file_path = "metadata.json"
-        return Data.load(file_path)
+        try:
+            from data import Data
+            file_path = "metadata.json"
+            return Data.load(file_path)
+        except Exception:
+            return "Unable to get all metadata in json file"

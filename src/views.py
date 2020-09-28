@@ -5,7 +5,6 @@ import json
 from website_availability import WebsiteAvailability
 from check_hash_and_ports import CheckHashAndPorts
 from scrape_website import ScrapeWebsite
-from notifications import Notifications
 from colorama import Fore
 from colorama import init
 init(autoreset=True)
@@ -50,7 +49,7 @@ class View:
 """
 
 
-class ChooseOptions(CheckHashAndPorts, ScrapeWebsite, View, Notifications):
+class ChooseOptions(CheckHashAndPorts, ScrapeWebsite, View):
 
     def __init__(self, website_address, individual_website_response) -> None:
         self.individual_website_response = individual_website_response
@@ -69,13 +68,19 @@ class ChooseOptions(CheckHashAndPorts, ScrapeWebsite, View, Notifications):
             sys.exit()
 
         elif self.individual_website_response == "2":
-            ip_address = website.get_ip_address()
-            return Fore.GREEN + f"The IP address of this website is {ip_address}"
+            try:
+                ip_address = website.get_ip_address()
+                return Fore.GREEN + f"The IP address of this website is {ip_address}"
+            except Exception:
+                return "Unable to get IP address"
 
         elif self.individual_website_response == "3":
-            http_status_code = website.get_http_status_code()
-            return Fore.GREEN + f"The HTTP status code is {http_status_code[0]}: {http_status_code[1]}"
-
+            try:
+                http_status_code = website.get_http_status_code()
+                return Fore.GREEN + f"The HTTP status code is {http_status_code[0]}: {http_status_code[1]}"
+            except Exception:
+                return "Unable to get HTTP status code"
+                
         elif self.individual_website_response == "4":
             print("*"*50)
             print("Page performance is the overall performance score.")
@@ -83,68 +88,103 @@ class ChooseOptions(CheckHashAndPorts, ScrapeWebsite, View, Notifications):
             print("Speed Index shows how quickly the page is populated.")
             print("Time to interactive is time it takes to become fully interactive.")
             print("*"*50)
-    
-            strategy = "strategy_unspecified"
-            page_performance = website.get_pagespeed(strategy)
-            return Fore.GREEN + f"Your page performance is {page_performance[0]}, First Meaningful Paint: {page_performance[1]}, Speed Index: {page_performance[2]},  Time To Interactive: {page_performance[3]}"
-
+            try: 
+                strategy = "strategy_unspecified"
+                page_performance = website.get_pagespeed(strategy)
+                return Fore.GREEN + f"Your page performance is {page_performance[0]}, First Meaningful Paint: {page_performance[1]}, Speed Index: {page_performance[2]},  Time To Interactive: {page_performance[3]}"
+            except Exception:
+                return "Unable to get data"
+                
         elif self.individual_website_response == "5":
-            whois_status = website.check_whois_status()
-            return Fore.GREEN + f"Expiration date: {whois_status[0]}, Registrar: {whois_status[1]}"
+            try:
+                whois_status = website.check_whois_status()
+                return Fore.GREEN + f"Expiration date: {whois_status[0]}, Registrar: {whois_status[1]}"
+            except Exception:
+                return "Unable to get Expiration date or registrar"
 
         elif self.individual_website_response == "6":
-            server_and_content_type = website.get_server_and_content_type()
-            return Fore.GREEN + f"Server: {server_and_content_type[0]}, Content type: {server_and_content_type[1]}"
-
+            try:
+                server_and_content_type = website.get_server_and_content_type()
+                return Fore.GREEN + f"Server: {server_and_content_type[0]}, Content type: {server_and_content_type[1]}"
+            except Exception:
+                return "Unable to get server and content type"
+                
         elif self.individual_website_response == "7":
-            ssl_expiry = website.ssl_expiry_datetime()
-            return Fore.GREEN + f"Expiration date of SSL certificate: {ssl_expiry}"
+            try:
+                ssl_expiry = website.ssl_expiry_datetime()
+                return Fore.GREEN + f"Expiration date of SSL certificate: {ssl_expiry}"
+            except Exception:
+                return "Unable to get expiration dat of SSL"
 
         elif self.individual_website_response == "8":
-            domain_name_is_registered = website.is_registered()
-            if domain_name_is_registered is True:
-                return (Fore.GREEN + "Domain name is registered")
-            elif domain_name_is_registered is False:
-                return Fore.RED + "Domain name is not registered"
+            try:
+                domain_name_is_registered = website.is_registered()
+                if domain_name_is_registered is True:
+                    return (Fore.GREEN + "Domain name is registered")
+                elif domain_name_is_registered is False:
+                    return Fore.RED + "Domain name is not registered"
+            except Exception:
+                return "Cannot find if domain is registered"
 
         elif self.individual_website_response == "9":
-            website_hash = website_hash_test.check_hash()
-            return Fore.GREEN + f"{website_hash}"
+            try:
+                website_hash = website_hash_test.check_hash()
+                return Fore.GREEN + f"{website_hash}"
+            except Exception:
+                return "Cannot get MD5 sum"
 
         elif self.individual_website_response == "10":
-            port_scan = website_hash_test.nmap_port_scanning()
-            return Fore.GREEN + f"{port_scan}"
+            try:
+                port_scan = website_hash_test.nmap_port_scanning()
+                return Fore.GREEN + f"{port_scan}"
+            except:
+                return "Unable to do port scan"
 
         elif self.individual_website_response == "11" or self.individual_website_response == "1":
-            nmap_ping = website_hash_test.nmap_ping_scanning()
-            return Fore.GREEN + f"The website is {nmap_ping}"
+            try:
+                nmap_ping = website_hash_test.nmap_ping_scanning()
+                return Fore.GREEN + f"The website is {nmap_ping}"
+            except Exception:
+                return "Unable to ping website"
 
         elif self.individual_website_response == "12":
-            website_scrape = ScrapeWebsite(self.website_address)
-            json_metadata = website_scrape.return_page_metadata()
-            all_data = website_scrape.all_metadata()
-            print(Fore.GREEN + f"Title: {all_data[-1]['title']}")
-            print(Fore.GREEN + f"Sitename: {all_data[-1]['sitename']}")
-            print(Fore.GREEN + f"Description: {all_data[-1]['description']}")
-            print(Fore.GREEN + f"Image: {all_data[-1]['image']}")
-            print(Fore.GREEN + f"Favicon: {all_data[-1]['favicon']}")
-            return Fore.GREEN + "Saved metadata to metadata.json"
+            try:
+                website_scrape = ScrapeWebsite(self.website_address)
+                json_metadata = website_scrape.return_page_metadata()
+                all_data = website_scrape.all_metadata()
+                print(Fore.GREEN + f"Title: {all_data[-1]['title']}")
+                print(Fore.GREEN + f"Sitename: {all_data[-1]['sitename']}")
+                print(Fore.GREEN + f"Description: {all_data[-1]['description']}")
+                print(Fore.GREEN + f"Image: {all_data[-1]['image']}")
+                print(Fore.GREEN + f"Favicon: {all_data[-1]['favicon']}")
+                return Fore.GREEN + "Saved metadata to metadata.json"
+            except Exception:
+                return "Unable to retrieve metadata"
 
         elif self.individual_website_response == "13":
-            print("Performing health check. Please be patient.")
-            website_health_check = website.health_check()
-            url = "https://api.sendgrid.com/v3/mail/send"
-            headers = {"Authorization": f"{os.environ.get('SENDGRID_API')}",
-                       "Content-Type": "application/json"}
-            payload = {"personalizations": 
-                       [{"to": [{"email": f"{os.environ.get('TEST_EMAIL')}"}]}],
-                       "from": {"email": f"{os.environ.get('TEST_EMAIL')}"},
-                       "subject": "Health Check Status Report",
-                       "content": [{"type": "text/plain", "value": f"Your page performance is: {website_health_check[0]}, HTTP Status: {website_health_check[1]}, Blacklisting score is: {website_health_check[2]}"}]}
-            message = requests.post(url, data=json.dumps(payload), headers=headers)
-            print(message.text)
-            return Fore.GREEN + f"Your page performance is: {website_health_check[0]}, HTTP Status: {website_health_check[1]}, Blacklisting score is: {website_health_check[2]}"
-
+            try:
+                print("Performing health check. Please be patient.")
+                website_health_check = website.health_check()
+                url = "https://api.sendgrid.com/v3/mail/send"
+                headers = {"Authorization": f"{os.environ.get('SENDGRID_API')}",
+                           "Content-Type": "application/json"}
+                payload = {"personalizations": 
+                           [{"to": [{"email": f"{os.environ.get('TEST_EMAIL')}"}]}],
+                           "from": {"email": f"{os.environ.get('TEST_EMAIL')}"},
+                           "subject": "Health Check Status Report",
+                           "content": [{"type": "text/plain", "value": f"Your page performance is: {website_health_check[0]}, HTTP Status: {website_health_check[1]}, Blacklisting score is: {website_health_check[2]}"}]}
+                message = requests.post(url, data=json.dumps(payload), headers=headers)
+                print(message.text)
+                return Fore.GREEN + f"Your page performance is: {website_health_check[0]}, HTTP Status: {website_health_check[1]}, Blacklisting score is: {website_health_check[2]}"
+            except Exception:
+                return "Unable to perform health check"
+                
         elif self.individual_website_response == "14":
-            blacklist_score = website.check_blacklisting()
-            return Fore.GREEN + f"Your confidence score is {blacklist_score}"
+            try:
+                blacklist_score = website.check_blacklisting()
+                return Fore.GREEN + f"Your confidence score is {blacklist_score}"
+            except Exception:
+                return "Unable to get blacklist score"
+        
+        else:
+            return Fore.RED + "That wasn't an option, try again."

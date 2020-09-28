@@ -12,7 +12,6 @@ if "--help" in sys.argv:
 else:
     pass
 
-"""Welcome Message"""
 print(40*"*")
 print(Fore.GREEN + """
 Welcome to the Website Availability
@@ -20,7 +19,6 @@ Python Terminal Application!
 """)
 print(40*"*")
 
-"""Loop to check user input"""
 while True:
     website_address = input("Which website would you like to check? \n")
     get_new_website = View(website_address)
@@ -34,11 +32,13 @@ while True:
     elif new_website[0] is False:
         continue
 
-"""Looping through options"""
 while True:
-    get_new_website = View(website_address)
-    options = get_new_website.show_options()
-    individual_website_response = input(options)
-    option = ChooseOptions(website_address, individual_website_response)
-    print(option.choose_options())
-    time.sleep(3)
+    try:
+        get_new_website = View(website_address)
+        options = get_new_website.show_options()
+        individual_website_response = input(options)
+        option = ChooseOptions(website_address, individual_website_response)
+        print(option.choose_options())
+        time.sleep(2)
+    except Exception:
+        print("Error in the program")
