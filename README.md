@@ -1,11 +1,30 @@
 ## Website Availability Application 
 
 ### Purpose
-This is a Python-based OOP terminal application which tests the availability of your website and performs a health check which is sent to your email address through the SendGrid API. The program also includes automated tests and a CI/CD pipeline using GitHib actions.
+This is a Python 3 based OOP terminal application which tests the availability of your website and performs a health check which is sent to your email address through the SendGrid API. The program also includes automated tests and a CI/CD pipeline using GitHib actions.
 
 The repository for this application can be found here: https://github.com/PandelisT/Website_Availability_Application.git.
 
-# Description
+To run the automated tests on GitHub follow these steps after you have installed Python 3 and installed the virtual environment:
+1) Install Nmap: ```apt-get install nmap```
+2) Install the dependencies: ```pip install -r requirements.txt```
+3) Set environment variables for ```TEST_DOMAIN```, ```TEST_IP_ADDRESS```, ```TEST_EMAIL``` and API keys for ```GOOGLE_API```, ```SIGNALS_API``` and ```SENDGRID_API``` in GitHub secrets.
+4) ```cd``` into  ```src``` folder and run ```python -m unittest discover tests/```.
+
+To deploy this application, please start an Amazon EC2 instance and include the public IPv4 address into the ```ci_cd_wapta.yml``` file as the host. You will then need to connect to the EC2 instance through your local computer, create a new user ```sudo adduser github-actions``` and ```sudo passwd -d github-actions``` to remove the password, create a SSH key pair and add the private key to GitHub secrets.
+
+Please follow these steps if you want to deploy this application manually:
+1) ```sudo apt-get update```
+2) ```sudo apt-get install python3.8```
+3) ```sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 1```
+4) ```sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 2```
+5) ```sudo apt install python3-pip```
+6) ```sudo ssh-keygen # For path enter /home/github-actions/id_rsa```
+7) ```cd /home/github-actions```
+8) ```sudo mkdir .ssh```
+9) ```sudo mv id_rsa.pub .ssh/authorized_keys```
+
+### Description
 
 The program is essentially composed of two loops: 
 1) Check the validity of a website address/URL
@@ -29,7 +48,7 @@ Below is a flowchart of the main functionality of the program:
 
 ![WAA Flowchart](WAA.png)
 
-# Dependencies
+### Dependencies
 
 This is a list of the main modules used in this application (a full list can be found in the requirements.txt file in the src folder):
 
@@ -46,7 +65,7 @@ This is a list of the main modules used in this application (a full list can be 
 - os for exiting the program
 - time for adding pauses to program
 
-# APIs 
+### APIs 
 
 There are three different APIs used in this program.
 

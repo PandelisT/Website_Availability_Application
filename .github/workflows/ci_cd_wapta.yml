@@ -15,7 +15,7 @@ jobs:
           python-version: 3.8
       - name: Install dependencies
         run: |
-          sudo apt-get install nmap
+          apt-get install nmap
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Run tests
@@ -24,6 +24,8 @@ jobs:
           TEST_IP_ADDRESS: 149.28.188.138
           GOOGLE_API: ${{ secrets.GOOGLE_API }}
           SIGNALS_API: ${{ secrets.SIGNALS_API }}
+          SENDGRID_API: ${{ secrets.SENDGRID_API }}
+          TEST_EMAIL: pandeli@nerdypandy.com
         run: |
           cd src && python -m unittest discover tests/
 

@@ -168,11 +168,12 @@ class ChooseOptions(CheckHashAndPorts, ScrapeWebsite, View):
                 url = "https://api.sendgrid.com/v3/mail/send"
                 headers = {"Authorization": f"{os.environ.get('SENDGRID_API')}",
                            "Content-Type": "application/json"}
+                email_content = f"Your page performance is: {website_health_check[0]}, HTTP Status: {website_health_check[1]}, Blacklisting score is: {website_health_check[2]}"
                 payload = {"personalizations": 
                            [{"to": [{"email": f"{os.environ.get('TEST_EMAIL')}"}]}],
                            "from": {"email": f"{os.environ.get('TEST_EMAIL')}"},
                            "subject": "Health Check Status Report",
-                           "content": [{"type": "text/plain", "value": f"Your page performance is: {website_health_check[0]}, HTTP Status: {website_health_check[1]}, Blacklisting score is: {website_health_check[2]}"}]}
+                           "content": [{"type": "text/plain", "value": f"{email_content}"}]}
                 message = requests.post(url, data=json.dumps(payload), headers=headers)
                 return Fore.GREEN + f"Your page performance is: {website_health_check[0]}, HTTP Status: {website_health_check[1]}, Blacklisting score is: {website_health_check[2]}"
             except Exception:
