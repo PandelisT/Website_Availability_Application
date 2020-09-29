@@ -7,6 +7,7 @@ from website_availability import WebsiteAvailability
 class CheckHashAndPorts(WebsiteAvailability):
 
     def check_hash(self) -> str:
+        # Returns if website hash is same or different in hash.json
         try:
             url = f"https://{self.website_address}"
             response = urlopen(url).read()
@@ -32,6 +33,7 @@ class CheckHashAndPorts(WebsiteAvailability):
             return "Error getting new hash"
 
     def all_hashes(self) -> str:
+        # Returns loaded hash.json file
         try:
             from data import Data
             file_path = "hash.json"
@@ -40,6 +42,7 @@ class CheckHashAndPorts(WebsiteAvailability):
             return "Error with loading json file"
 
     def nmap_port_scanning(self) -> str:
+        # Prints ports that are open and returns "Completed" when done
         try:
             nmap = nmap3.Nmap()
             results = nmap.scan_top_ports(f"{self.website_address}")
@@ -52,6 +55,7 @@ class CheckHashAndPorts(WebsiteAvailability):
             return "Unable to perform scan"
             
     def nmap_ping_scanning(self) -> str:
+        # Returns result of website ping (up or down)
         try:
             nmap = nmap3.NmapScanTechniques()
             ip_address = self.get_ip_address()

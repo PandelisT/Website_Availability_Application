@@ -12,10 +12,11 @@ init(autoreset=True)
 
 class View:
 
-    def __init__(self, website_address):
+    def __init__(self, website_address) -> None:
         self.website_address = website_address
 
-    def get_website(self):
+    def get_website(self) -> bool:
+        # Returns True/False if the website address is valid.
         isValid = True
         if self.website_address[0:8] == "https://":
             self.website_address = self.website_address[8:]
@@ -29,7 +30,7 @@ class View:
             isValid = False
             return (isValid, Fore.RED + "URL is not valid")
 
-    def show_options(self):
+    def show_options(self) -> str:
         return """\nWhat would you like to check on this website?
 1. Is your website up?
 2. What is the website's IP address?
@@ -56,7 +57,7 @@ class ChooseOptions(CheckHashAndPorts, ScrapeWebsite, View):
         self.website_address = website_address
 
     def choose_options(self):
-
+        #Returns multiple data types depending on the option chosen. 
         website = WebsiteAvailability(self.website_address)
 
         website_hash_test = CheckHashAndPorts(self.website_address)

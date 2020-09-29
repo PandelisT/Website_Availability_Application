@@ -13,6 +13,7 @@ class WebsiteAvailability:
         self.website_address = website_address
 
     def get_ip_address(self) -> str:
+        # Returns IP address of website address
         try:
             ip_address = socket.gethostbyname(f"{self.website_address}")
             return ip_address
@@ -20,6 +21,7 @@ class WebsiteAvailability:
             return "Unable to get IP Address"
 
     def get_http_status_code(self) -> tuple:
+        # Returns HTTP status of website address
         try:
             response = requests.get(f"https://{self.website_address}")
             status = response.status_code
@@ -39,6 +41,7 @@ class WebsiteAvailability:
             return (0, "No Internet")
 
     def check_whois_status(self) -> tuple:
+        # Returns expiration date of domain and registrar
         try:
             domain = whois.whois(f"{self.website_address}")
             return (domain.expiration_date, domain.registrar)
@@ -46,6 +49,7 @@ class WebsiteAvailability:
             return ("Expiration date unavailable", "Domain registrar unavailable")
 
     def get_pagespeed(self, strategy: str) -> tuple:
+        # Returns performance score and other metrics using the Google PageSpeed API
         try:
             Google_API_Key = os.environ.get("GOOGLE_API")
             base_url = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url="
@@ -62,6 +66,7 @@ class WebsiteAvailability:
             return (0, "0", "0", "0")
 
     def is_registered(self) -> bool:
+        # Returns True or False if the domain name is registered
         try:
             w = whois.whois(self.website_address)
             return bool(w.domain_name)
@@ -69,6 +74,7 @@ class WebsiteAvailability:
             return False
 
     def get_server_and_content_type(self) -> tuple:
+        # Returns server and content type of website
         try:
             resp = requests.head(f"https://{self.website_address}")
             server = resp.headers["server"]
@@ -78,11 +84,13 @@ class WebsiteAvailability:
             return ("Unavailable", "Unavailable")
 
     def ssl_expiry_datetime(self) -> datetime.datetime:
+        # Returns SSL expiry date
         try:
             logger = logging.getLogger("SSLVerify")
             ssl_date_fmt = r'%b %d %H:%M:%S %Y %Z'
             context = ssl.create_default_context()
-            conn = context.wrap_socket(socket.socket(socket.AF_INET), server_hostname=self.website_address)
+            conn = context.wrap_socket(socket.socket(socket.AF_INET), 
+                                       server_hostname=self.website_address)
             logger.debug(f"Connect to {self.website_address}")
             conn.connect((self.website_address, 443))
             ssl_info = conn.getpeercert()
@@ -91,6 +99,7 @@ class WebsiteAvailability:
             return datetime.datetime.now()
 
     def health_check(self) -> tuple:
+        # Returns health check metrics
         try:
             strategy = "strategy_unspecified"
             page_performance = self.get_pagespeed(strategy)
@@ -102,6 +111,7 @@ class WebsiteAvailability:
             return (0, 0, 0)
 
     def check_blacklisting(self) -> int:
+        # Returns blacklisting score using the Signals Auth0 API"
         try:
             headers = {"x-auth-token": os.environ.get("SIGNALS_API")}
             base_url = "https://signals.api.auth0.com/v2.0/ip/"
@@ -110,5 +120,5 @@ class WebsiteAvailability:
             r = json.loads(response.text)
             return r['fullip']['baddomain']['score']
         except Exception:
-            print("Unable to check blacklisting. Possible error with Signals API if value is 1.")
+            print("""Unable to check blacklisting. Possible error with Signals API if value is 1.""")
             return 1
