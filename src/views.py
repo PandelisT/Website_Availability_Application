@@ -57,7 +57,7 @@ class ChooseOptions(CheckHashAndPorts, ScrapeWebsite, View):
         self.website_address = website_address
 
     def choose_options(self):
-        #Returns multiple data types depending on the option chosen. 
+        # Returns multiple data types depending on the option chosen.
         website = WebsiteAvailability(self.website_address)
 
         website_hash_test = CheckHashAndPorts(self.website_address)
@@ -81,7 +81,7 @@ class ChooseOptions(CheckHashAndPorts, ScrapeWebsite, View):
                 return Fore.GREEN + f"The HTTP status code is {http_status_code[0]}: {http_status_code[1]}"
             except Exception:
                 return "Unable to get HTTP status code"
-                
+
         elif self.individual_website_response == "4":
             print("*"*50)
             print("Page performance is the overall performance score.")
@@ -95,7 +95,7 @@ class ChooseOptions(CheckHashAndPorts, ScrapeWebsite, View):
                 return Fore.GREEN + f"Your page performance is {page_performance[0]}, First Meaningful Paint: {page_performance[1]}, Speed Index: {page_performance[2]},  Time To Interactive: {page_performance[3]}"
             except Exception:
                 return "Unable to get data"
-                
+
         elif self.individual_website_response == "5":
             try:
                 whois_status = website.check_whois_status()
@@ -109,7 +109,7 @@ class ChooseOptions(CheckHashAndPorts, ScrapeWebsite, View):
                 return Fore.GREEN + f"Server: {server_and_content_type[0]}, Content type: {server_and_content_type[1]}"
             except Exception:
                 return "Unable to get server and content type"
-                
+
         elif self.individual_website_response == "7":
             try:
                 ssl_expiry = website.ssl_expiry_datetime()
@@ -138,7 +138,7 @@ class ChooseOptions(CheckHashAndPorts, ScrapeWebsite, View):
             try:
                 port_scan = website_hash_test.nmap_port_scanning()
                 return Fore.GREEN + f"{port_scan}"
-            except:
+            except Exception:
                 return "Unable to do port scan"
 
         elif self.individual_website_response == "11" or self.individual_website_response == "1":
@@ -170,7 +170,7 @@ class ChooseOptions(CheckHashAndPorts, ScrapeWebsite, View):
                 headers = {"Authorization": f"{os.environ.get('SENDGRID_API')}",
                            "Content-Type": "application/json"}
                 email_content = f"Your page performance is: {website_health_check[0]}, HTTP Status: {website_health_check[1]}, Blacklisting score is: {website_health_check[2]}"
-                payload = {"personalizations": 
+                payload = {"personalizations":
                            [{"to": [{"email": f"{os.environ.get('TEST_EMAIL')}"}]}],
                            "from": {"email": f"{os.environ.get('TEST_EMAIL')}"},
                            "subject": "Health Check Status Report",
@@ -179,13 +179,13 @@ class ChooseOptions(CheckHashAndPorts, ScrapeWebsite, View):
                 return Fore.GREEN + f"Your page performance is: {website_health_check[0]}, HTTP Status: {website_health_check[1]}, Blacklisting score is: {website_health_check[2]}"
             except Exception:
                 return "Unable to perform health check"
-                
+
         elif self.individual_website_response == "14":
             try:
                 blacklist_score = website.check_blacklisting()
                 return Fore.GREEN + f"Your confidence score is {blacklist_score}"
             except Exception:
                 return "Unable to get blacklist score"
-        
+
         else:
             return Fore.RED + "That wasn't an option, try again."

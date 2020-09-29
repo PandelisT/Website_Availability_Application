@@ -74,7 +74,7 @@ class ScrapeWebsite(WebsiteAvailability):
         try:
             html = self.get_html()
             return html.find("meta", property="og:site_name").get('content')
-        except:
+        except Exception:
             return "Unable to get site name"
 
     def get_favicon(self) -> str:
@@ -89,7 +89,7 @@ class ScrapeWebsite(WebsiteAvailability):
             from data import Data
             file_path = "metadata.json"
             saved_metadata = self.all_metadata()
-    
+
             new_metadata = {
                 "title": self.get_title(),
                 "description": self.get_description(),
@@ -97,7 +97,7 @@ class ScrapeWebsite(WebsiteAvailability):
                 "favicon": self.get_favicon(),
                 "sitename":  self.get_site_name(),
                 }
-    
+
             saved_metadata.append(new_metadata)
             Data.save(file_path, saved_metadata)
             return "Added to file"

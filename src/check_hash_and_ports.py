@@ -12,7 +12,7 @@ class CheckHashAndPorts(WebsiteAvailability):
             url = f"https://{self.website_address}"
             response = urlopen(url).read()
             newHash = hashlib.sha224(response).hexdigest()
-    
+
             from data import Data
             file_path = "hash.json"
             saved_hashes = self.all_hashes()
@@ -24,7 +24,7 @@ class CheckHashAndPorts(WebsiteAvailability):
                         return "Website may be hacked!"
                 if website_hash['title'] != self.website_address:
                     pass
-    
+
             new_hash = {"title": self.website_address, "hash": newHash}
             saved_hashes.append(new_hash)
             Data.save(file_path, saved_hashes)
@@ -51,9 +51,9 @@ class CheckHashAndPorts(WebsiteAvailability):
                 if port['state'] == "open":
                     print(f"Port {port['portid']}: {port['state']}")
             return "Completed"
-        except:
+        except Exception:
             return "Unable to perform scan"
-            
+
     def nmap_ping_scanning(self) -> str:
         # Returns result of website ping (up or down)
         try:

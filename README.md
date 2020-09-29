@@ -1,34 +1,16 @@
 ## Website Availability Application 
 
 ### Purpose
+
 This is a Python 3 based OOP terminal application which tests the availability of your website and performs a health check which is sent to your email address through the SendGrid API. The program also includes automated tests and a CI/CD pipeline using GitHib actions.
 
 The repository for this application can be found here: https://github.com/PandelisT/Website_Availability_Application.git.
 
-To run the automated tests on GitHub follow these steps after you have installed Python 3 and installed the virtual environment:
-1) Install Nmap: ```apt-get install nmap```
-2) Install the dependencies: ```pip install -r requirements.txt```
-3) Set environment variables for ```TEST_DOMAIN```, ```TEST_IP_ADDRESS```, ```TEST_EMAIL``` and API keys for ```GOOGLE_API```, ```SIGNALS_API``` and ```SENDGRID_API``` in GitHub secrets.
-4) ```cd``` into  ```src``` folder and run ```python -m unittest discover tests/```.
-
-To deploy this application, please start an Amazon EC2 instance and include the public IPv4 address into the ```ci_cd_wapta.yml``` file as the host. You will then need to connect to the EC2 instance through your local computer, create a new user ```sudo adduser github-actions``` and ```sudo passwd -d github-actions``` to remove the password, create a SSH key pair and add the private key to GitHub secrets.
-
-Please follow these steps if you want to deploy this application manually:
-1) ```sudo apt-get update```
-2) ```sudo apt-get install python3.8```
-3) ```sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 1```
-4) ```sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 2```
-5) ```sudo apt install python3-pip```
-6) ```sudo ssh-keygen # For path enter /home/github-actions/id_rsa```
-7) ```cd /home/github-actions```
-8) ```sudo mkdir .ssh```
-9) ```sudo mv id_rsa.pub .ssh/authorized_keys```
-
 ### Description
 
 The program is essentially composed of two loops: 
-1) Check the validity of a website address/URL
-2) Choose between 15 options with regards to checking up on the website above.
+1) Checking the validity of a website address/URL that you wish to test.
+2) Choosing between 15 options with regards to checking up on the website above.
 
 The first loop essentially checks the validity of a website address through attempting to make a HTTP GET request to the desired URL within a try and except block. If the GET request is successful, the loop is broken whereas if the GET request response is not successful the loop continues until a valid website address is inputted.
 
@@ -46,7 +28,7 @@ Each of the 15 options are split into different classes and class methods:
 
 Below is a flowchart of the main functionality of the program:
 
-![WAA Flowchart](WAA.png)
+![WAA Flowchart](images/WAA.png)
 
 ### Dependencies
 
@@ -75,3 +57,24 @@ The PageSpeed Insights API used to make GET requests and receive responses for t
 The Auth0 Signals API is used to check if an IP address is blacklisted. The range of responses from the GET request is approximately -4 to 0, with 0 being the highest confidence.
 3) [SendGrid API](https://sendgrid.com/docs/API_Reference/api_v3.html). Create an account and go to the [API key settings](https://app.sendgrid.com/settings/api_keys).
 The SendGrid API is used to make a POST request to send an email report to the user about the health check performance.  
+
+### Running automated tests and deploying the application
+
+To run the application and/or automated tests on GitHub on Ubuntu follow these steps after you have installed Python 3 and the virtual environment:
+1) Install Nmap: ```sudo apt-get install nmap```
+2) Install the dependencies: ```pip install -r requirements.txt```
+3) Set environment variables for ```TEST_DOMAIN```, ```TEST_IP_ADDRESS```, ```TEST_EMAIL``` and API keys for ```GOOGLE_API```, ```SIGNALS_API``` and ```SENDGRID_API``` in GitHub secrets.
+4) For running the tests: ```cd``` into  ```src``` folder and run ```python -m unittest discover tests/```.
+
+To deploy this application, please start an Amazon EC2 instance and include the public IPv4 address into the ```ci_cd_wapta.yml``` file as the host. You will then need to connect to the EC2 instance through your local computer, create a new user ```sudo adduser github-actions``` and ```sudo passwd -d github-actions``` to remove the password, create a SSH key pair and add the private key to GitHub secrets.
+
+Please follow these steps if you want to deploy this application manually on a Linux OS:
+1) ```sudo apt-get update```
+2) ```sudo apt-get install nmap```
+3) ```sudo apt-get install python3.8```
+4) ```sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 2```
+5) ```sudo apt install python3-pip```
+6) ```sudo ssh-keygen # For path enter /home/github-actions/id_rsa```
+7) ```cd /home/github-actions```
+8) ```sudo mkdir .ssh```
+9) ```sudo mv id_rsa.pub .ssh/authorized_keys```
