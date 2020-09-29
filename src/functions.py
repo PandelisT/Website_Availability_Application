@@ -1,5 +1,3 @@
-
-
 def instructions():
     print("""
 Here are the steps to run this application:

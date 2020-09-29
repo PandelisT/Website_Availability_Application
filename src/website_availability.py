@@ -43,7 +43,7 @@ class WebsiteAvailability:
             domain = whois.whois(f"{self.website_address}")
             return (domain.expiration_date, domain.registrar)
         except Exception:
-            return "Unable to get domain information"
+            return ("Expiration date unavailable", "Domain registrar unavailable")
 
     def get_pagespeed(self, strategy: str) -> tuple:
         try:
@@ -57,7 +57,8 @@ class WebsiteAvailability:
             speed_index = json_data["lighthouseResult"]["audits"]["speed-index"]["displayValue"]
             time_to_interactive = json_data["lighthouseResult"]["audits"]["interactive"]["displayValue"]
             return (score*100, first_meaningful_paint, speed_index, time_to_interactive)
-        except Exception:
+        except KeyError:
+            print("Unable to connect to Google Page Insights API.")
             return (0, "0", "0", "0")
 
     def is_registered(self) -> bool:
@@ -89,7 +90,7 @@ class WebsiteAvailability:
         except Exception:
             return datetime.datetime.now()
 
-    def health_check(self):
+    def health_check(self) -> tuple:
         try:
             strategy = "strategy_unspecified"
             page_performance = self.get_pagespeed(strategy)
@@ -97,9 +98,10 @@ class WebsiteAvailability:
             blacklisting_score = self.check_blacklisting()
             return (page_performance[0], http_status[0], blacklisting_score)
         except Exception:
+            print("Unable to perform health check")
             return (0, 0, 0)
 
-    def check_blacklisting(self) -> str:
+    def check_blacklisting(self) -> int:
         try:
             headers = {"x-auth-token": os.environ.get("SIGNALS_API")}
             base_url = "https://signals.api.auth0.com/v2.0/ip/"
@@ -108,4 +110,5 @@ class WebsiteAvailability:
             r = json.loads(response.text)
             return r['fullip']['baddomain']['score']
         except Exception:
-            return 0
+            print("Unable to check blacklisting. Possible error with Signals API if value is 1.")
+            return 1

@@ -29,7 +29,7 @@ class CheckHashAndPorts(WebsiteAvailability):
             Data.save(file_path, saved_hashes)
             return "Added to file"
         except Exception:
-            return "Error"
+            return "Error getting new hash"
 
     def all_hashes(self) -> str:
         try:

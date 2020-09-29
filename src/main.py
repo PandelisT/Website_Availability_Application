@@ -13,10 +13,7 @@ else:
     pass
 
 print(40*"*")
-print(Fore.GREEN + """
-Welcome to the Website Availability
-Python Terminal Application!
-""")
+print(Fore.GREEN + """Welcome to the Website Availability Python Terminal Application!""")
 print(40*"*")
 
 while True:

@@ -174,7 +174,6 @@ class ChooseOptions(CheckHashAndPorts, ScrapeWebsite, View):
                            "subject": "Health Check Status Report",
                            "content": [{"type": "text/plain", "value": f"Your page performance is: {website_health_check[0]}, HTTP Status: {website_health_check[1]}, Blacklisting score is: {website_health_check[2]}"}]}
                 message = requests.post(url, data=json.dumps(payload), headers=headers)
-                print(message.text)
                 return Fore.GREEN + f"Your page performance is: {website_health_check[0]}, HTTP Status: {website_health_check[1]}, Blacklisting score is: {website_health_check[2]}"
             except Exception:
                 return "Unable to perform health check"
