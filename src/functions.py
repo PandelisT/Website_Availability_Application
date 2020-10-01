@@ -1,4 +1,4 @@
-def instructions():
+def instructions() -> None:
     print("""
 This is a Python 3 based OOP terminal application which tests the availability of your website and performs a health check which is sent to your email address through the SendGrid API. The program also includes automated tests and a CI/CD pipeline using GitHib actions.
 The repository for this application can be found here: https://github.com/PandelisT/Website_Availability_Application.git.

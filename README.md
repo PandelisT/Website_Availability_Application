@@ -16,7 +16,7 @@ The first loop essentially checks the validity of a website address through atte
 
 The second loop simply checks whether the input given by the user is valid. The input is a number between 1 and 15 with option 15 being the program termination command. If a user does not input correctly the loop continues until a valid input is given and a result is displayed. The loop then continues until option 15 is chosen. 
 
-Each invidual option is handled with a try and except block which tells the user if the operation is successful or not. There is a unique return value for successful and unsuccessful operations. If errors are encountered, there are three levels of handling. The initial error handling occurs in the class method for example, the get_pagespeed method in the WebsiteAvailability class, the second in the ChooseOptions class in views.py and the third is in the main.py file. 
+Each individual option is handled with a try and except block which tells the user if the operation is successful or not. There is a unique return value for successful and unsuccessful operations. If errors are encountered, there are three levels of handling. The initial error handling occurs in the class method for example, the get_pagespeed method in the WebsiteAvailability class, the second in the ChooseOptions class in views.py and the third is in the main.py file. 
 
 Each of the 15 options are split into different classes and class methods:
 
@@ -60,13 +60,13 @@ The SendGrid API is used to make a POST request to send an email report to the u
 
 ### Running automated tests and deploying the application
 
-To run the application and/or automated tests on GitHub on Ubuntu follow these steps after you have installed Python 3 and the virtual environment:
+To run the application and/or automated tests follow these steps after you have installed Python 3 and the virtual environment:
 1) Install Nmap: ```sudo apt-get install nmap```
 2) Install the dependencies: ```pip install -r requirements.txt```
 3) Set environment variables for ```TEST_DOMAIN```, ```TEST_IP_ADDRESS```, ```TEST_EMAIL``` and API keys for ```GOOGLE_API```, ```SIGNALS_API``` and ```SENDGRID_API``` in GitHub secrets.
 4) For running the tests: ```cd``` into  ```src``` folder and run ```python -m unittest discover tests/```.
 
-To deploy this application, please start an Amazon EC2 instance and include the public IPv4 address into the ```ci_cd_wapta.yml``` file as the host. You will then need to connect to the EC2 instance through your local computer, create a new user ```sudo adduser github-actions``` and ```sudo passwd -d github-actions``` to remove the password, create a SSH key pair and add the private key to GitHub secrets.
+To deploy this application on an Amazon EC2 instance, include the public IPv4 address as a GitHub secret (```EC2_IP_ADDRESS```) into the ```ci_cd_wapta.yml``` file as the ```host```. You will then need to connect to the EC2 instance through your local computer, create a new user ```sudo adduser github-actions``` and ```sudo passwd -d github-actions``` to remove the password, create a SSH key pair and add the private key to GitHub secrets as ```SSH_KEY``` as well as the IP address of the EC2 instance as ```EC2_IP_ADDRESS``` as mentioned previously.
 
 Please follow these steps if you want to deploy this application manually on a Linux OS:
 1) ```sudo apt-get update```
